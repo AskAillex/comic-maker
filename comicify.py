@@ -231,7 +231,14 @@ def cmd_assemble(a):
                 cx = (quad[0][0] + quad[1][0]) / 2
                 cw = quad[1][0] - quad[0][0]
                 if panel.get("dialogue"):
-                    bubble(d, canvas, panel["dialogue"], cx, y + 18, cw * 0.78, f_dlg)
+                    # tall+narrow bubble docked in a top SIDE corner (faces live top-center):
+                    # alternate sides by panel for reading rhythm; ~42% width wraps text tall.
+                    narrow = cw * 0.42
+                    if idx % 2 == 1:  # odd panel -> left corner
+                        bcx = quad[0][0] + narrow / 2 + 26
+                    else:              # even panel -> right corner
+                        bcx = quad[1][0] - narrow / 2 - 26
+                    bubble(d, canvas, panel["dialogue"], bcx, y + 16, narrow, f_dlg)
                 if panel.get("sfx"):
                     sx, sy = quad[3][0] + cw * 0.06, y + row_h * 0.80
                     for off in ((4, 4), (-4, 4), (4, -4), (-4, -4)):
